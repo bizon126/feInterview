@@ -1,14 +1,26 @@
-import {Component} from '@angular/core';
-import {map, Observable, timer} from 'rxjs';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {map, Observable, Subject, takeUntil, timer} from 'rxjs';
 
 @Component({
   selector: 'app-task-2',
   template: '<h1>Task #2</h1>',
 })
-export class Task2Component {
+export class Task2Component implements OnInit, OnDestroy{
+
+  private isSubscribed = false;
+  private destroy$ = new Subject<void>();
 
   constructor() {
+
+  }
+
+  ngOnInit() {
     this.task2();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   /**
@@ -22,7 +34,16 @@ export class Task2Component {
    * @param stream$
    */
   private getData<T>(stream$: Observable<T>): Observable<T> {
-    return stream$;
+
+
+    if (this.isSubscribed) {
+      this.destroy$.next();
+      this.isSubscribed = false;
+    }
+
+    this.isSubscribed = true;
+    return stream$.pipe(
+      takeUntil(this.destroy$));
   }
 
   /**
@@ -30,6 +51,8 @@ export class Task2Component {
    * @private
    */
   private task2(): void {
+
+
     this.getData(timer(3000))
       .pipe(
         map(() => `Request #1`),

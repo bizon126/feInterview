@@ -1,4 +1,5 @@
-import {Component} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, QueryList, ViewChildren} from '@angular/core';
+import {DynamicComponent} from "../dynamic/dynamic.component";
 
 
 @Component({
@@ -13,11 +14,26 @@ import {Component} from '@angular/core';
   <app-dynamic></app-dynamic>
   `,
 })
-export class Task4Component {
+export class Task4Component implements AfterViewInit{
+  @ViewChildren(DynamicComponent, {read: ElementRef}) viewChildren!: QueryList<ElementRef>;
+
+  constructor() {
+  }
+
+  ngAfterViewInit() {
+    this.viewChildren.forEach((el, index) => {
+      if ((index + 1) % 2 == 0) {
+        el.nativeElement.classList.add('selected');
+      }
+    });
+  }
+
+
   /**
    * Задача:
    *
    * Поставьте каждому четному элементу <app-dynamic> во вью CSS класс ".selected",
    * не изменяя шаблон компонента, используя только инструменты Angular.
    */
+
 }

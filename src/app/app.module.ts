@@ -9,6 +9,7 @@ import {Task1Component} from './task-1/task-1.component';
 import {Task2Component} from './task-2/task-2.component';
 import {Task3Component} from './task-3/task-3.component';
 import {Task4Component} from './task-4/task-4.component';
+import {PlaceholderDirective} from "./task-3/placeholder.directive";
 
 const routes: Routes = [
   {path: '', redirectTo: 'task-1', pathMatch: 'full'},
@@ -26,6 +27,7 @@ const routes: Routes = [
     Task3Component,
     Task4Component,
     DynamicComponent,
+    PlaceholderDirective
   ],
   imports: [
     BrowserModule,
